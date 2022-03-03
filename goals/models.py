@@ -6,7 +6,7 @@ class Goal(models.Model):
 
     # user field
     title = models.CharField(max_length=50)
-    order = models.SmallAutoField()  # implement increment for every user
+    # order = models.SmallAutoField()  # implement increment for every user
 
     percent_of_net = models.DecimalField(
         max_digits=5, decimal_places=2,
@@ -32,7 +32,7 @@ class Wallet(models.Model):
     """Wallet is a part of a goal and can contain multiple pockets"""
 
     title = models.CharField(max_length=50)
-    order = models.SmallAutoField()  # implement increment for every users Goal
+    # order = models.SmallAutoField()  # implement increment for every users Goal
 
     goal = models.ForeignKey(Goal, on_delete=models.CASCADE)
 
@@ -71,7 +71,7 @@ class Pocket(models.Model):
     """A pocket is the place where you hold you money"""
 
     title = models.CharField(max_length=50, blank=True, null=True)
-    order = models.SmallAutoField()  # implement increment for every Wallet
+    # order = models.SmallAutoField()  # implement increment for every Wallet
 
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     pocket_group = models.ForeignKey(PocketGroup, on_delete=models.SET_NULL)
