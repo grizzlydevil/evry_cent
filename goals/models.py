@@ -1,6 +1,7 @@
 from django.db import models
 
 from cycles.models import Cycle
+from banks.models import Account
 
 
 class Goal(models.Model):
@@ -90,13 +91,13 @@ class Pocket(models.Model):
         null=True, blank=True,
         default=0.00
     )
-    reuse_percent = models.BooleanField(default=False)
+    percent_locked = models.BooleanField(default=False)
     money_in = models.DecimalField(
         max_digits=12, decimal_places=2,
         null=True, blank=True,
         default=0.00
     )
-    reuse_money_in = models.BooleanField(default=False)
+    money_in_locked = models.BooleanField(default=False)
 
     in_outside_salary = models.DecimalField(
         max_digits=12, decimal_places=2, default=0.00
@@ -113,9 +114,7 @@ class Pocket(models.Model):
         null=True, blank=True,
     )
 
-    # Bank
-    # Account
-    # Vault foreignKey on_delete PROTECT?
+    # bank_account = models.ForeignKey(Account, on_delete=models.SET_NULL)
 
     date_created = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)

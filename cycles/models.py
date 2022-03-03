@@ -1,5 +1,7 @@
 from django.db import models
 
+from banks.models import Account
+
 
 class Cycle(models.Model):
     """
@@ -27,7 +29,11 @@ class Income(models.Model):
     amount = models.DecimalField(max_digits=12, decimal_places=2)
     cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
 
-    # bank account
+    bank_account = models.ForeignKey(
+        Account, on_delete=models.SET_NULL, null=True, blank=True
+    )
+
+    cash = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title
