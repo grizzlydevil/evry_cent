@@ -1,6 +1,6 @@
 from django.db import models
 
-from cycles import Cycle
+from cycles.models import Cycle
 
 
 class Goal(models.Model):
