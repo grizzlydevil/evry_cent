@@ -110,11 +110,12 @@ class Pocket(models.Model):
 
     saving = models.BooleanField(default=False)
     target = models.DecimalField(
-        max_digits=12, decimal_places=2,
-        null=True, blank=True,
+        max_digits=12, decimal_places=2, null=True, blank=True,
     )
 
-    # bank_account = models.ForeignKey(Account, on_delete=models.SET_NULL)
+    bank_account = models.ForeignKey(
+        Account, on_delete=models.SET_NULL, null=True, blank=True
+    )
 
     date_created = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
