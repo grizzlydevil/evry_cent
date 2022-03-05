@@ -1,7 +1,7 @@
 from django.db import models
 
 from cycles.models import Cycle
-from banks.models import Account
+from banks.models import Account, Vault
 
 
 class Goal(models.Model):
@@ -108,13 +108,15 @@ class Pocket(models.Model):
     )
     out_notes = models.CharField(max_length=160, null=True, blank=True)
 
-    saving = models.BooleanField(default=False)
     target = models.DecimalField(
         max_digits=12, decimal_places=2, null=True, blank=True,
     )
 
     bank_account = models.ForeignKey(
         Account, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    vault = models.ForeignKey(
+        Vault, on_delete=models.SET_NULL, null=True, blank=True
     )
 
     date_created = models.DateTimeField(auto_now_add=True)
