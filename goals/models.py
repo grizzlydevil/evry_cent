@@ -65,7 +65,10 @@ class Wallet(models.Model):
 
 
 class PocketGroup(models.Model):
-    """A pocket group holds many pockets that are used for the same purpose"""
+    """
+    A pocket group holds many pockets that are used for the same purpose
+    but have different bank accounts or rules to save funds
+    """
 
     title = models.CharField(max_length=50)
 
