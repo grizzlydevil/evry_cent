@@ -122,8 +122,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'evry Cent',
-        'USER': 'meska',
-        'PASSWORD': 'a55a551n',
+        'USER': 'pguser',
+        'PASSWORD': '123456',
         'HOST': '127.0.0.1',
         'PORT': '5432',
     }
