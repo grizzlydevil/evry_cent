@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 from banks.models import Account
 
@@ -10,6 +11,10 @@ class Cycle(models.Model):
     All the funds from one cycle are being distributed over all of the goals.
     """
 
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
 
