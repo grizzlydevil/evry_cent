@@ -103,7 +103,7 @@ class Pocket(models.Model):
     """A pocket is the place where you hold you money"""
 
     title = models.CharField(max_length=50, blank=True, null=True)
-    # order = models.SmallAutoField()  # implement increment for every Wallet
+    order = models.PositiveSmallIntegerField()
 
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     pocket_group = models.ForeignKey(
@@ -149,9 +149,9 @@ class Pocket(models.Model):
     active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs) -> None:
-        all_goals_wallets = self.goal.wallet_set.order_by('-order')
-        if all_goals_wallets:
-            biggest_order = all_goals_wallets.values()[0]
+        all_wallets_pockets = self.wallet.pocket_set.order_by('-order')
+        if all_wallets_pockets:
+            biggest_order = all_wallets_pockets.values()[0]
             self.order = biggest_order + 1
         else:
             self.order = 1
