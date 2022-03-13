@@ -34,10 +34,9 @@ class Goal(models.Model):
     active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs) -> None:
-        all_users_goals = self.user.goal_set.order_by('-order')
-        if all_users_goals:
-            biggest_order = all_users_goals.values()[0]
-            self.order = biggest_order + 1
+        last_order_goal = self.user.goal_set.order_by('-order').first()
+        if last_order_goal:
+            self.order = last_order_goal.order + 1
         else:
             self.order = 1
 
@@ -74,10 +73,9 @@ class Wallet(models.Model):
     active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs) -> None:
-        all_goals_wallets = self.goal.wallet_set.order_by('-order')
-        if all_goals_wallets:
-            biggest_order = all_goals_wallets.values()[0]
-            self.order = biggest_order + 1
+        last_order_wallet = self.goal.wallet_set.order_by('-order').first()
+        if last_order_wallet:
+            self.order = last_order_wallet.order + 1
         else:
             self.order = 1
 
@@ -149,10 +147,9 @@ class Pocket(models.Model):
     active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs) -> None:
-        all_wallets_pockets = self.wallet.pocket_set.order_by('-order')
-        if all_wallets_pockets:
-            biggest_order = all_wallets_pockets.values()[0]
-            self.order = biggest_order + 1
+        last_order_pocket = self.wallet.pocket_set.order_by('-order').first()
+        if last_order_pocket:
+            self.order = last_order_pocket.order + 1
         else:
             self.order = 1
 
