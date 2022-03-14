@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 
 from banks.models import Account
+from goals.models import Pocket
 
 
 class Cycle(models.Model):
@@ -42,3 +43,30 @@ class Income(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class IncomeDistributor(models.Model):
+    """
+    Distributes money from a single Cycle to all the Pockets
+    """
+
+    cycle = models.ForeignKey(
+        Cycle, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    pocket = models.ForeignKey(Pocket, on_delete=models.CASCADE)
+
+    money_in = models.DecimalField(
+        max_digits=12, decimal_places=2,
+        null=True, blank=True,
+        default=0.00
+    )
+
+    in_outside_salary = models.DecimalField(
+        max_digits=12, decimal_places=2, default=0.00
+    )
+    in_outside_notes = models.CharField(max_length=160, null=True, blank=True)
+
+    out = models.DecimalField(
+        max_digits=12, decimal_places=2, default=0.00, null=True, blank=True
+    )
+    out_notes = models.CharField(max_length=160, null=True, blank=True)

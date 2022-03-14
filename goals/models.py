@@ -1,7 +1,6 @@
 from django.db import models
 from django.conf import settings
 
-from cycles.models import Cycle
 from banks.models import Account, Vault
 
 
@@ -13,22 +12,18 @@ class Goal(models.Model):
         on_delete=models.CASCADE
     )
     title = models.CharField(max_length=50)
-    order = models.PositiveSmallIntegerField()
-
-    cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
+    order = models.PositiveSmallIntegerField(default=1)
 
     percent_of_net = models.DecimalField(
         max_digits=5, decimal_places=2,
         null=True, blank=True,
         default=0.00
     )
-    percent_locked = models.BooleanField(default=False)
-    money_in = models.DecimalField(
+    default_amount = models.DecimalField(
         max_digits=12, decimal_places=2,
         null=True, blank=True,
         default=0.00
     )
-    money_in_locked = models.BooleanField(default=False)
 
     date_created = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
@@ -61,13 +56,11 @@ class Wallet(models.Model):
         null=True, blank=True,
         default=0.00
     )
-    percent_locked = models.BooleanField(default=False)
-    money_in = models.DecimalField(
+    default_amount = models.DecimalField(
         max_digits=12, decimal_places=2,
         null=True, blank=True,
         default=0.00
     )
-    money_in_locked = models.BooleanField(default=False)
 
     date_created = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
@@ -115,24 +108,13 @@ class Pocket(models.Model):
         null=True, blank=True,
         default=0.00
     )
-    percent_locked = models.BooleanField(default=False)
-    money_in = models.DecimalField(
+    default_amount = models.DecimalField(
         max_digits=12, decimal_places=2,
         null=True, blank=True,
         default=0.00
     )
-    money_in_locked = models.BooleanField(default=False)
 
-    in_outside_salary = models.DecimalField(
-        max_digits=12, decimal_places=2, default=0.00
-    )
-    in_outside_notes = models.CharField(max_length=160, null=True, blank=True)
-    out = models.DecimalField(
-        max_digits=12, decimal_places=2, default=0.00, null=True, blank=True
-    )
-    out_notes = models.CharField(max_length=160, null=True, blank=True)
-
-    target = models.DecimalField(
+    save_target = models.DecimalField(
         max_digits=12, decimal_places=2, null=True, blank=True,
     )
 
