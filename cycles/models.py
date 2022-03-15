@@ -48,6 +48,7 @@ class Income(models.Model):
 class IncomeDistributor(models.Model):
     """
     Distributes money from a single Cycle to all the Pockets
+    There is a single IncomeDistributor for every Pocket
     """
 
     cycle = models.ForeignKey(
@@ -70,3 +71,23 @@ class IncomeDistributor(models.Model):
         max_digits=12, decimal_places=2, default=0.00, null=True, blank=True
     )
     out_notes = models.CharField(max_length=160, null=True, blank=True)
+
+
+class IncomeLendingSlip(models.Model):
+    """
+    Lend income to another Pocket
+    """
+
+    amount = models.DecimalField(
+        max_digits=12, decimal_places=2, default=0.00
+    )
+    sender = models.ForeignKey(
+        IncomeDistributor, on_delete=models.CASCADE, related_name='sender'
+    )
+    receiver = models.ForeignKey(
+        IncomeDistributor, on_delete=models.CASCADE, related_name='receiver'
+    )
+
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    active = models.BooleanField(default=True)
