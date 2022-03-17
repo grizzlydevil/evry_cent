@@ -25,7 +25,8 @@ class Goal(models.Model):
         default=0.00
     )
 
-    date_created = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs) -> None:
@@ -62,7 +63,8 @@ class Wallet(models.Model):
         default=0.00
     )
 
-    date_created = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs) -> None:
@@ -85,6 +87,8 @@ class PocketGroup(models.Model):
     """
 
     title = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return self.title
@@ -125,7 +129,8 @@ class Pocket(models.Model):
         Vault, on_delete=models.SET_NULL, null=True, blank=True
     )
 
-    date_created = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs) -> None:
@@ -156,6 +161,11 @@ class LendingSlip(models.Model):
         Pocket, on_delete=models.CASCADE, related_name='receiver'
     )
 
-    date_created = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     active = models.BooleanField(default=True)
+
+    def __str__(self) -> str:
+        return (f'{self.sender.title} lended to'
+                f'{self.receiver.title}')
