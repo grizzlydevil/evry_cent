@@ -1,3 +1,6 @@
-from django.shortcuts import render
+from rest_framework import generics
 
-# Create your views here.
+from .serializers import GoalSerializer
+
+
+class GoalView(generics.)

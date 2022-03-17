@@ -5,7 +5,7 @@ from banks.models import Account, Vault
 
 
 class Goal(models.Model):
-    """A goal for all containing wallets"""
+    """A goal that contains wallets"""
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
