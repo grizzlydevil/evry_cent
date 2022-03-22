@@ -54,7 +54,9 @@ class Wallet(models.Model):
     title = models.CharField(max_length=50)
     order = models.PositiveSmallIntegerField()
 
-    goal = models.ForeignKey(Goal, on_delete=models.CASCADE)
+    goal = models.ForeignKey(
+        Goal, on_delete=models.CASCADE, related_name='wallets'
+    )
 
     description = models.TextField(max_length=320)
 
@@ -109,7 +111,9 @@ class Pocket(models.Model):
     title = models.CharField(max_length=50, blank=True, null=True)
     order = models.PositiveSmallIntegerField()
 
-    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
+    wallet = models.ForeignKey(
+        Wallet, on_delete=models.CASCADE, related_name='pockets'
+    )
     pocket_group = models.ForeignKey(
         PocketGroup, on_delete=models.SET_NULL, null=True, blank=True
     )
