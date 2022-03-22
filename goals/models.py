@@ -7,6 +7,9 @@ from banks.models import Account, Vault
 class Goal(models.Model):
     """A goal that contains wallets"""
 
+    class Meta:
+        ordering = ['order']
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE
@@ -44,6 +47,9 @@ class Goal(models.Model):
 
 class Wallet(models.Model):
     """Wallet is a part of a goal and can contain multiple pockets"""
+
+    class Meta:
+        ordering = ['order']
 
     title = models.CharField(max_length=50)
     order = models.PositiveSmallIntegerField()
@@ -96,6 +102,9 @@ class PocketGroup(models.Model):
 
 class Pocket(models.Model):
     """A pocket is the place where you hold you money"""
+
+    class Meta:
+        ordering = ['order']
 
     title = models.CharField(max_length=50, blank=True, null=True)
     order = models.PositiveSmallIntegerField()
