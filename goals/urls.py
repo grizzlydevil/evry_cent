@@ -1,8 +1,14 @@
-from django.urls import path
+from django.urls import path, include
 
-from .views import ListGoalsView
+from rest_framework import routers
+
+from .views import GoalsViewSet
 
 app_name = 'goals'
+
+router = routers.SimpleRouter()
+router.register('', GoalsViewSet, basename='goal')
+
 urlpatterns = [
-    path('', ListGoalsView.as_view(), name='goals')
+    path('', include(router.urls)),
 ]

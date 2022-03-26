@@ -1,19 +1,21 @@
 from django.db.models import Max
 
-from rest_framework import generics
+from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 
 from .serializers import GoalSerializer
 from .models import Goal
 
 
-class ListGoalsView(generics.ListCreateAPIView):
+class GoalsViewSet(viewsets.ModelViewSet):
     """
-    List all Goals, Wallets and Pockets
+    Goals viewset for listing, creating and managing Goals, Wallets and Pockets
     """
 
     serializer_class = GoalSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         """get current users goals"""
