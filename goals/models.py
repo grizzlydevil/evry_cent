@@ -32,15 +32,6 @@ class Goal(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
 
-    def save(self, *args, **kwargs) -> None:
-        last_order_goal = self.user.goal_set.order_by('-order').first()
-        if last_order_goal:
-            self.order = last_order_goal.order + 1
-        else:
-            self.order = 1
-
-        super().save(*args, **kwargs)
-
     def __str__(self) -> str:
         return self.title
 
