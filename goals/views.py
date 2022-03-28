@@ -1,4 +1,4 @@
-from django.db.models import Max
+from django.db.models import Max, F
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
@@ -29,10 +29,25 @@ class GoalsViewSet(viewsets.ModelViewSet):
         create new goal wallet or pocket for current user assign order to it
         """
 
-        # save a goal
+        # set order number and user for a new goal
         user = self.request.user
-        max_order = Goal.objects.filter(user=user, active=True).aggregate(
-            max=Max('order')
-        ).get('max')
-        new_obj_order = max_order + 1 if max_order else 1
-        serializer.save(user=user, order=new_obj_order)
+        order = self.request.data.get('order')
+
+        if not order:
+            max_order = Goal.objects.filter(user=user, active=True).aggregate(
+                max=Max('order')
+            ).get('max')
+            order = max_order + 1 if max_order else 1
+        serializer.save(user=user, order=order)
+
+    def perform_destroy(self, instance):
+        order = instance.order
+        super().perform_destroy(instance)
+
+        # update order or remaining objects
+        (
+            Goal.objects
+            .filter(user=self.request.user)
+            .filter(order__gt=order)
+            .update(order=F('order')-1)
+        )

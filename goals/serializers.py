@@ -23,6 +23,6 @@ class GoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Goal
         fields = '__all__'
-        read_only_fields = ('user', 'order', 'active')
+        read_only_fields = ('user', 'active')
 
     wallets = WalletSerializer(many=True, read_only=True)
