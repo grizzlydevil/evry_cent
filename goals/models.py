@@ -66,15 +66,6 @@ class Wallet(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
 
-    def save(self, *args, **kwargs) -> None:
-        last_order_wallet = self.goal.wallet_set.order_by('-order').first()
-        if last_order_wallet:
-            self.order = last_order_wallet.order + 1
-        else:
-            self.order = 1
-
-        super().save(*args, **kwargs)
-
     def __str__(self) -> str:
         return self.title
 
@@ -136,15 +127,6 @@ class Pocket(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
-
-    def save(self, *args, **kwargs) -> None:
-        last_order_pocket = self.wallet.pocket_set.order_by('-order').first()
-        if last_order_pocket:
-            self.order = last_order_pocket.order + 1
-        else:
-            self.order = 1
-
-        super().save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.title if self.title else self.wallet.title
