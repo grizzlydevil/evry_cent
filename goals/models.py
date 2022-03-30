@@ -15,6 +15,8 @@ class Goal(models.Model):
         on_delete=models.CASCADE
     )
     title = models.CharField(max_length=50)
+    description = models.TextField(max_length=320, null=True, blank=True)
+
     order = models.PositiveSmallIntegerField(default=1)
 
     percent_of_net = models.DecimalField(
@@ -49,7 +51,7 @@ class Wallet(models.Model):
         Goal, on_delete=models.CASCADE, related_name='wallets'
     )
 
-    description = models.TextField(max_length=320)
+    description = models.TextField(max_length=320, null=True, blank=True)
 
     percent_of_goal = models.DecimalField(
         max_digits=5, decimal_places=2,
@@ -100,7 +102,7 @@ class Pocket(models.Model):
         PocketGroup, on_delete=models.SET_NULL, null=True, blank=True
     )
 
-    description = models.TextField(max_length=320)
+    description = models.TextField(max_length=320, null=True, blank=True)
 
     percent_of_wallet = models.DecimalField(
         max_digits=5, decimal_places=2,
