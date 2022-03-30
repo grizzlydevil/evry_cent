@@ -91,12 +91,13 @@ class WalletViewSet(viewsets.GenericViewSet,
 
     def perform_destroy(self, instance):
         order = instance.order
+        goal = instance.goal
         super().perform_destroy(instance)
 
         # update order for remaining objects
         (
-            Goal.objects
-            .filter(user=self.request.user)
+            Wallet.objects
+            .filter(goal=goal)
             .filter(order__gt=order)
             .update(order=F('order')-1)
         )
