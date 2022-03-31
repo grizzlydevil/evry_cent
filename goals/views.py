@@ -5,7 +5,7 @@ from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Goal, Wallet, Pocket
-from .serializers import GoalSerializer, WalletSerializer
+from .serializers import GoalSerializer, PocketSerializer, WalletSerializer
 
 
 class GoalsViewSet(viewsets.ModelViewSet):
@@ -87,7 +87,7 @@ class WalletViewSet(viewsets.GenericViewSet,
         )
         order = max_order + 1 if max_order else 1
 
-        serializer.save(goal=goal, order=order)
+        serializer.save(order=order)
 
     def perform_destroy(self, instance):
         order = instance.order
@@ -98,6 +98,58 @@ class WalletViewSet(viewsets.GenericViewSet,
         (
             Wallet.objects
             .filter(goal=goal)
+            .filter(order__gt=order)
+            .update(order=F('order')-1)
+        )
+
+
+class PocketViewSet(viewsets.GenericViewSet,
+                    mixins.CreateModelMixin,
+                    mixins.DestroyModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.RetrieveModelMixin):
+    """
+    Pocket viewset for listing, creating and managing pockets
+    """
+
+    permission_classes = (IsAuthenticated,)
+    serializer_class = PocketSerializer
+
+    def get_queryset(self):
+        """Get current users pockets"""
+        goal_ids = Goal.objects.filter(user=self.request.user).values('id')
+
+        return Pocket.objects.filter(
+            wallet__goal__id__in=goal_ids,
+            active=True
+        ).order_by('order')
+
+    def perform_create(self, serializer):
+        """
+        create new wallet for specified goal and assign order to it
+        """
+
+        # set order number and goal for a new wallet
+        wallet = Wallet.objects.get(pk=self.request.data['wallet'])
+
+        max_order = (
+            Pocket.objects.filter(active=True, wallet=wallet)
+            .aggregate(max=Max('order'))
+            .get('max')
+        )
+        order = max_order + 1 if max_order else 1
+
+        serializer.save(order=order)
+
+    def perform_destroy(self, instance):
+        order = instance.order
+        wallet = instance.wallet
+        super().perform_destroy(instance)
+
+        # update order for remaining objects
+        (
+            Pocket.objects
+            .filter(wallet=wallet)
             .filter(order__gt=order)
             .update(order=F('order')-1)
         )
