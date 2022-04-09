@@ -20,7 +20,7 @@ class GoalsViewSet(viewsets.ModelViewSet):
         """get current users goals"""
         return Goal.objects.filter(
             user=self.request.user,
-            active=True
+            active=True  # if take of this then handle ordering
         ).order_by('order')
 
     def perform_create(self, serializer):
@@ -69,7 +69,7 @@ class WalletViewSet(viewsets.GenericViewSet,
 
         return Wallet.objects.filter(
             goal__id__in=goal_ids,
-            active=True
+            active=True  # if take of this then handle ordering
         ).order_by('order')
 
     def perform_create(self, serializer):
@@ -121,7 +121,7 @@ class PocketViewSet(viewsets.GenericViewSet,
 
         return Pocket.objects.filter(
             wallet__goal__id__in=goal_ids,
-            active=True
+            active=True  # if take of this then handle ordering
         ).order_by('order')
 
     def perform_create(self, serializer):
