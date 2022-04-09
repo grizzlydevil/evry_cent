@@ -4,8 +4,10 @@ from rest_framework import mixins
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Goal, Wallet, Pocket
-from .serializers import GoalSerializer, PocketSerializer, WalletSerializer
+from .models import Goal, Wallet, Pocket, PocketGroup
+from .serializers import (
+    GoalSerializer, PocketSerializer, WalletSerializer, PocketGroupSerializer
+)
 
 
 class GoalsViewSet(viewsets.ModelViewSet):
@@ -57,7 +59,7 @@ class WalletViewSet(viewsets.GenericViewSet,
                     mixins.UpdateModelMixin,
                     mixins.RetrieveModelMixin):
     """
-    Wallet viewset for listing, creating and managing Wallets
+    Wallet viewset for creating updating and deleting Wallets
     """
 
     permission_classes = (IsAuthenticated,)
@@ -109,7 +111,7 @@ class PocketViewSet(viewsets.GenericViewSet,
                     mixins.UpdateModelMixin,
                     mixins.RetrieveModelMixin):
     """
-    Pocket viewset for listing, creating and managing pockets
+    Pocket viewset for creating updating and deleting pockets
     """
 
     permission_classes = (IsAuthenticated,)
@@ -153,3 +155,19 @@ class PocketViewSet(viewsets.GenericViewSet,
             .filter(order__gt=order)
             .update(order=F('order')-1)
         )
+
+
+class PocketGroupViewSet(viewsets.ModelViewSet):
+    """Viewset for listing, creating and managing Pocket groups"""
+
+    permission_classes = (IsAuthenticated,)
+    serializer_class = PocketGroupSerializer
+
+    def get_queryset(self):
+        """Get current users pocket groups"""
+        pocket_group_ids = Pocket.objects.filter(
+            wallet__goal__user=self.request.user,
+            pocket_group__isnull=False
+        ).values('pocket_group')
+
+        return PocketGroup.objects.filter(id__in=pocket_group_ids)

@@ -99,7 +99,8 @@ class Pocket(models.Model):
         Wallet, on_delete=models.CASCADE, related_name='pockets'
     )
     pocket_group = models.ForeignKey(
-        PocketGroup, on_delete=models.SET_NULL, null=True, blank=True
+        PocketGroup, on_delete=models.SET_NULL, null=True, blank=True,
+        related_name='pockets'
     )
 
     description = models.TextField(max_length=320, null=True, blank=True)
