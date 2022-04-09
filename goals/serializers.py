@@ -38,6 +38,11 @@ class PocketSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('value must be positive')
         return value
 
+    def validate_save_target(self, value):
+        if value and value < 0:
+            raise serializers.ValidationError('value must be positive')
+        return value
+
     def validate_wallet(self, value):
         if (
             value.goal.user != self.context['request'].user or
