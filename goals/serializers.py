@@ -31,8 +31,9 @@ class PocketSerializer(serializers.ModelSerializer):
     wallet = FieldValuesFilteredByUser()
 
     def validate_percent_of_wallet(self, value):
-        if value and value < 0:
-            raise serializers.ValidationError('value must be positive')
+        if value and (value < 0 or value > 100):
+            raise serializers.ValidationError(
+                'value must be positive and no more than 100')
         return value
 
     def validate_default_amount(self, value):
@@ -68,8 +69,9 @@ class WalletSerializer(serializers.ModelSerializer):
     goal = FieldValuesFilteredByUser()
 
     def validate_percent_of_goal(self, value):
-        if value and value < 0:
-            raise serializers.ValidationError('value must be positive')
+        if value and (value < 0 or value > 100):
+            raise serializers.ValidationError(
+                'value must be positive and no more than 100')
         return value
 
     def validate_default_amount(self, value):
@@ -99,8 +101,9 @@ class GoalSerializer(serializers.ModelSerializer):
     active = serializers.BooleanField(initial=True)
 
     def validate_percent_of_net(self, value):
-        if value and value < 0:
-            raise serializers.ValidationError('value must be positive')
+        if value and (value < 0 or value > 100):
+            raise serializers.ValidationError(
+                'value must be positive and no more than 100')
         return value
 
     def validate_default_amount(self, value):
