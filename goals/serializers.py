@@ -15,8 +15,10 @@ class FieldValuesFilteredByUser(serializers.PrimaryKeyRelatedField):
             field_values = Wallet.objects.filter(goal__user=user)
         elif self.field_name == 'goal':
             field_values = Goal.objects.filter(user=user)
+        elif self.parent.field_name == 'pockets':
+            field_values = Pocket.objects.filter(wallet__goal__user=user)
 
-        field_values.filter(active=True)
+        field_values = field_values.filter(active=True)
 
         return field_values
 
@@ -116,6 +118,10 @@ class PocketGroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = PocketGroup
         fields = ('title', 'pockets')
+
+    pockets = serializers.ManyRelatedField(
+        child_relation=FieldValuesFilteredByUser()
+    )
 
     def validate_pockets(self, value):
 
