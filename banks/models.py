@@ -4,6 +4,8 @@ from django.conf import settings
 
 class Bank(models.Model):
     """Bank which can contain multiple accounts"""
+    class Meta:
+        ordering = ['name']
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -20,6 +22,8 @@ class Bank(models.Model):
 
 class Account(models.Model):
     """Bank account"""
+    class Meta:
+        ordering = ['created_at']
 
     name = models.CharField(max_length=50, null=True, blank=True)
     bank = models.ForeignKey(Bank, on_delete=models.CASCADE)
@@ -33,6 +37,8 @@ class Account(models.Model):
 
 class Vault(models.Model):
     """A bank account might have vaults to split funds in the account"""
+    class Meta:
+        ordering = ['name']
 
     name = models.CharField(max_length=50)
     account = models.ForeignKey(
