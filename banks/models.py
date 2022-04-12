@@ -26,7 +26,8 @@ class Account(models.Model):
         ordering = ['created_at']
 
     name = models.CharField(max_length=50, null=True, blank=True)
-    bank = models.ForeignKey(Bank, on_delete=models.CASCADE)
+    bank = models.ForeignKey(Bank, on_delete=models.CASCADE,
+                             related_name='accounts')
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -42,7 +43,8 @@ class Vault(models.Model):
 
     name = models.CharField(max_length=50)
     account = models.ForeignKey(
-        Account, on_delete=models.CASCADE, null=True, blank=True
+        Account, on_delete=models.CASCADE, null=True, blank=True,
+        related_name='vaults'
     )
 
     created_at = models.DateTimeField(auto_now_add=True)

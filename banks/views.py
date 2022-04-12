@@ -39,4 +39,4 @@ class VaultViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         """get current users banks"""
-        return Vault.objects.filter(account_bank__user=self.request.user)
+        return Vault.objects.filter(account__bank__user=self.request.user)
