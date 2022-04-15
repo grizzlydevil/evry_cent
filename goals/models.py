@@ -120,7 +120,7 @@ class Pocket(models.Model):
         max_digits=12, decimal_places=2, null=True, blank=True,
     )
 
-    bank_account = models.ForeignKey(
+    account = models.ForeignKey(
         Account, on_delete=models.SET_NULL, null=True, blank=True
     )
     vault = models.ForeignKey(

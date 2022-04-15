@@ -3,6 +3,7 @@ from django.db.models import Q
 from rest_framework import serializers
 
 from .models import Goal, Wallet, Pocket, PocketGroup
+from cycles.serializers import IncomeDistributorSerializer
 
 
 class FieldValuesFilteredByUser(serializers.PrimaryKeyRelatedField):

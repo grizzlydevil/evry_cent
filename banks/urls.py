@@ -5,8 +5,8 @@ from .views import BankViewSet, AccountViewSet, VaultViewSet
 app_name = 'banks'
 
 router = routers.DefaultRouter()
-router.register('bank', BankViewSet, basename='bank')
-router.register('account', AccountViewSet, basename='account')
-router.register('vault', VaultViewSet, basename='vault')
+router.register('banks', BankViewSet, basename='bank')
+router.register('accounts', AccountViewSet, basename='account')
+router.register('vaults', VaultViewSet, basename='vault')
 
 urlpatterns = router.urls

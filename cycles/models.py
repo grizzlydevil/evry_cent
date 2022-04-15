@@ -17,32 +17,33 @@ class Cycle(models.Model):
         on_delete=models.CASCADE
     )
     start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    end_date = models.DateTimeField(null=True, blank=True)
+    timespan = models.DurationField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:
         return (
-            f'{self.start_date.strftime("%Y-%m-%d")} - '
-            f'{self.end_date.strftime("%Y-%m-%d")}'
+            f'{self.start_date.strftime("%Y-%m-%d")}' +
+            f' - {self.end_date.strftime("%Y-%m-%d")}' if self.end_date else ''
         )
 
 
 class Income(models.Model):
     """
-    An income which will be split for the goals
+    An income which will be split for the goals.
+    One or more incomes can exist in a single cycle.
     """
 
     title = models.CharField(max_length=30)
     amount = models.DecimalField(max_digits=12, decimal_places=2)
-    cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE)
+    cycle = models.ForeignKey(Cycle, on_delete=models.CASCADE,
+                              related_name='incomes')
 
-    bank_account = models.ForeignKey(
+    account = models.ForeignKey(
         Account, on_delete=models.SET_NULL, null=True, blank=True
     )
-
-    cash = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -58,13 +59,13 @@ class IncomeDistributor(models.Model):
     """
 
     cycle = models.ForeignKey(
-        Cycle, on_delete=models.SET_NULL, null=True, blank=True
+        Cycle, on_delete=models.CASCADE, related_name='distributors'
     )
-    pocket = models.ForeignKey(Pocket, on_delete=models.CASCADE)
+    pocket = models.ForeignKey(Pocket, on_delete=models.CASCADE,
+                               related_name='distributors')
 
     money_in = models.DecimalField(
         max_digits=12, decimal_places=2,
-        null=True, blank=True,
         default=0.00
     )
 
@@ -74,7 +75,7 @@ class IncomeDistributor(models.Model):
     in_outside_notes = models.CharField(max_length=160, null=True, blank=True)
 
     out = models.DecimalField(
-        max_digits=12, decimal_places=2, default=0.00, null=True, blank=True
+        max_digits=12, decimal_places=2, default=0.00
     )
     out_notes = models.CharField(max_length=160, null=True, blank=True)
 
