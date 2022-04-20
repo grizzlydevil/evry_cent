@@ -81,10 +81,10 @@ class IncomeDistributorSerializer(serializers.ModelSerializer):
         selected_pocket = data['pocket']
 
         if (
-            IncomeDistributor.objects.
-            filter(cycle=selected_cycle).
-            filter(pocket=selected_pocket).
-            exists()
+            IncomeDistributor.objects
+            .filter(cycle=selected_cycle)
+            .filter(pocket=selected_pocket)
+            .exists()
         ):
             raise serializers.ValidationError(
                 'too many distributors per 1 cycle in 1 pocket')
