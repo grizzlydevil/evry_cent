@@ -108,22 +108,3 @@ class CycleSerializer(serializers.ModelSerializer):
                 'Start date must be before end date')
 
         return data
-
-    def create(self, validated_data):
-        """Create income distributors for every active pocket"""
-        cycle_instance = super().create(validated_data)
-
-        active_pockets = (
-            Pocket.objects
-            .filter(wallet__goal__user=self.context['request'].user)
-            .filter(active=True)
-        )
-
-        distributors = []
-        for pocket in active_pockets:
-            distributors.append(IncomeDistributor(cycle=cycle_instance,
-                                                  pocket=pocket))
-
-        IncomeDistributor.objects.bulk_create(distributors)
-
-        return cycle_instance
