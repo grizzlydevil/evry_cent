@@ -171,3 +171,10 @@ class PocketGroupViewSet(viewsets.ModelViewSet):
         ).values('pocket_group')
 
         return PocketGroup.objects.filter(id__in=pocket_group_ids)
+
+    def perform_create(self, serializer):
+        """
+        Assign user to pocket group
+        """
+
+        serializer.save(user=self.request.user)

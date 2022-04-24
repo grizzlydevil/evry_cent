@@ -78,6 +78,11 @@ class PocketGroup(models.Model):
     but have different bank accounts or rules to save funds
     """
 
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE
+    )
+
     title = models.CharField(max_length=50)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -87,7 +92,7 @@ class PocketGroup(models.Model):
 
 
 class Pocket(models.Model):
-    """A pocket is the place where you hold you money"""
+    """A wallet can have multiple pockets"""
 
     class Meta:
         ordering = ['order']

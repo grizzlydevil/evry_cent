@@ -3,7 +3,7 @@ from django.db.models import Q
 from rest_framework import serializers
 
 from .models import Goal, Wallet, Pocket, PocketGroup
-from cycles.serializers import IncomeDistributorSerializer
+from banks.models import Account, Vault
 
 
 class FieldValuesFilteredByUser(serializers.PrimaryKeyRelatedField):
@@ -13,13 +13,24 @@ class FieldValuesFilteredByUser(serializers.PrimaryKeyRelatedField):
     def get_queryset(self):
         user = self.context['request'].user
         if self.field_name == 'wallet':
-            field_values = Wallet.objects.filter(goal__user=user)
+            field_values = (
+                Wallet.objects.filter(goal__user=user).filter(active=True)
+            )
         elif self.field_name == 'goal':
-            field_values = Goal.objects.filter(user=user)
+            field_values = (
+                Goal.objects.filter(user=user).filter(active=True)
+            )
         elif self.parent.field_name == 'pockets':
-            field_values = Pocket.objects.filter(wallet__goal__user=user)
-
-        field_values = field_values.filter(active=True)
+            field_values = (
+                Pocket.objects.filter(wallet__goal__user=user)
+                .filter(active=True)
+            )
+        elif self.field_name == 'pocket_group':
+            field_values = PocketGroup.objects.filter(user=user)
+        elif self.field_name == 'account':
+            field_values = Account.objects.filter(bank__user=user)
+        elif self.field_name == 'vault':
+            field_values = Vault.objects.filter(account__bank__user=user)
 
         return field_values
 
@@ -31,6 +42,9 @@ class PocketSerializer(serializers.ModelSerializer):
         read_only_fields = ('order', 'active')
 
     wallet = FieldValuesFilteredByUser()
+    pocket_group = FieldValuesFilteredByUser()
+    account = FieldValuesFilteredByUser()
+    vault = FieldValuesFilteredByUser()
 
     def validate_percent_of_wallet(self, value):
         if value and (value < 0 or value > 100):
