@@ -83,25 +83,21 @@ class IncomeDistributor(models.Model):
         return f'{self.pocket.title} distributor'
 
 
-class IncomeLendingSlip(models.Model):
+class MoneyTransferSlip(models.Model):
     """
-    Lend income to another Pocket
+    Lend, return or  income to another Pocket
     """
 
     amount = models.DecimalField(
         max_digits=12, decimal_places=2, default=0.00
     )
-    sender = models.ForeignKey(
-        IncomeDistributor, on_delete=models.CASCADE, related_name='sender'
-    )
-    receiver = models.ForeignKey(
-        IncomeDistributor, on_delete=models.CASCADE, related_name='receiver'
-    )
+
+    # binding means these funds are lended or are a returned previous lend
+    binding = models.BooleanField(default=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     active = models.BooleanField(default=True)
 
     def __str__(self) -> str:
-        return (f'{self.sender.pocket.title} lended to'
-                f'{self.receiver.pocket.title}')
+        return self.amount
