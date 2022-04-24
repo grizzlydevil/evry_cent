@@ -28,9 +28,8 @@ class PocketSerializer(serializers.ModelSerializer):
     class Meta:
         model = Pocket
         fields = '__all__'
-        read_only_fields = ('order',)
+        read_only_fields = ('order', 'active')
 
-    active = serializers.BooleanField(initial=True)
     wallet = FieldValuesFilteredByUser()
 
     def validate_percent_of_wallet(self, value):
@@ -64,11 +63,10 @@ class WalletSerializer(serializers.ModelSerializer):
     class Meta:
         model = Wallet
         fields = '__all__'
-        read_only_fields = ('order',)
+        read_only_fields = ('order', 'active')
 
     pockets = PocketSerializer(many=True, read_only=True)
 
-    active = serializers.BooleanField(initial=True)
     goal = FieldValuesFilteredByUser()
 
     def validate_percent_of_goal(self, value):
@@ -97,11 +95,9 @@ class GoalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Goal
         fields = '__all__'
-        read_only_fields = ('user', 'order')
+        read_only_fields = ('user', 'order', 'active')
 
     wallets = WalletSerializer(many=True, read_only=True)
-
-    active = serializers.BooleanField(initial=True)
 
     def validate_percent_of_net(self, value):
         if value and (value < 0 or value > 100):
