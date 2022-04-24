@@ -69,7 +69,7 @@ class Wallet(models.Model):
     active = models.BooleanField(default=True)
 
     def __str__(self) -> str:
-        return self.title
+        return f'{self.goal.title} -> {self.title}'
 
 
 class PocketGroup(models.Model):
