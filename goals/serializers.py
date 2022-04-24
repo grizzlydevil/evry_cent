@@ -42,9 +42,9 @@ class PocketSerializer(serializers.ModelSerializer):
         read_only_fields = ('order', 'active')
 
     wallet = FieldValuesFilteredByUser()
-    pocket_group = FieldValuesFilteredByUser()
-    account = FieldValuesFilteredByUser()
-    vault = FieldValuesFilteredByUser()
+    pocket_group = FieldValuesFilteredByUser(required=False)
+    account = FieldValuesFilteredByUser(required=False)
+    vault = FieldValuesFilteredByUser(required=False)
 
     def validate_percent_of_wallet(self, value):
         if value and (value < 0 or value > 100):
